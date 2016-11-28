@@ -8,26 +8,23 @@
 
 #define UuusRandomColorRGB (arc4random() % 256) / 255.0
 
-#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 const static double UuusTwoPI = 2.0 * M_PI;
 
 @interface UuusPieChartItem : NSObject
 
-// Updated automatically.
+// updated automatically
 @property (nonatomic) double value;
 @property (nonatomic) double proportion;
 
-/**
- *  Anti-clockwise 12 o'clock.
- */
+// anti-clockwise 12 o'clock
 @property (nonatomic) double angle;
 
-// Nil means random color.
+// nil means random color
 @property (nonatomic, strong) UIColor *color;
 
-// Custom description
+// custom description
 @property (nonatomic, copy) NSString *textDescription;
 
 + (instancetype)itemWithValue:(double)value

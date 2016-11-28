@@ -48,7 +48,7 @@
     double appendingValue = 0.0;
     
     
-    // Initialize item's proportion and angle.
+    // initialize item's proportion and angle
     for (UuusPieChartItem *item in _itemsArray) {
         preValue = appendingValue;
         appendingValue += item.value;
@@ -68,26 +68,22 @@
         NSUInteger idx = [_itemsArray indexOfObject:object];
         double angle = [[change valueForKey:@"new"] doubleValue];
         
-        // Check lower index if (idx > 0).
+        // check lower index if (idx > 0)
         if (idx > 0) {
             UuusPieChartItem *item = _itemsArray[idx - 1];
-            if (angle < item.angle) {
-                item.angle = angle;
-            }
+            if (angle < item.angle) item.angle = angle;
         }
-        // Check higher index if (idx < self.count - 1).
+        // check higher index if (idx < self.count - 1)
         if (idx < self.count - 1) {
             UuusPieChartItem *item = _itemsArray[idx + 1];
-            if (angle > item.angle) {
-                item.angle = angle;
-            }
+            if (angle > item.angle) item.angle = angle;
         }
         
         double totalValue = self.value;
         double preProportion = 0.0;
         double preValue = 0.0;
         
-        // Update item's proportion and angle.
+        // update item's proportion and angle
         for (UuusPieChartItem *item in self.itemsArray) {
             double angleProportion = item.angle / UuusTwoPI;
             
@@ -96,7 +92,7 @@
             item.value = angleProportion * totalValue - preValue;
             preValue = angleProportion * totalValue;
             
-            NSLogU(@"Item[%d].value = %f.", [self.itemsArray indexOfObject:item], item.value);
+            NSLogU(@"item[%d].value = %f", [self.itemsArray indexOfObject:item], item.value);
         }
         self.updated = YES;
     }

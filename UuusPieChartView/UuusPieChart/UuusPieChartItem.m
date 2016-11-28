@@ -23,7 +23,7 @@
 }
 
 - (void)setValue:(double)value {
-    NSAssert(value >= 0, @"Value should >= 0.");
+    NSAssert(value >= 0, @"value should >= 0");
     if (value != _value) {
         _value = value;
     }

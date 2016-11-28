@@ -18,23 +18,23 @@ const static double kRadiusOfHandlesImage = 13.0;
 #import "UuusPieChartModel.h"
 #import "UuusPieChartItem.h"
 
-@interface UuusPieChartView ()
+@interface UuusPieChartView () <CAAnimationDelegate>
 
-// Radius of pie chart path.
+// radius of pie chart path
 @property (nonatomic) double ringsRadius;
 
-// View model.
+// view model
 @property (nonatomic, strong) UuusPieChartModel *model;
 
-// Pie chart layer container.
+// pie chart layer container
 @property (nonatomic, strong) CALayer *layerContainer;
 
-// True means update layer with animations.
+// true means update layer with animations
 @property (nonatomic) BOOL updateAnimated;
 
 @property (nonatomic, strong) NSArray<UIImageView *> *handlesImageViewArray;
 
-// Value -1 means not sure touches index.
+// value -1 means not sure touches index
 @property (nonatomic) long touchesIndex;
 
 @property (nonatomic, strong) NSMutableArray *touchesIndexesArray;
@@ -107,7 +107,7 @@ const static double kRadiusOfHandlesImage = 13.0;
         [self.touchesIndexesArray removeAllObjects];
     }
     
-    // Append the nearest handles Image against touch point.
+    // append the nearest handles image against touch point
     double minimumRadius = kRadiusOfHandlesImage * 1.69;
     for (long i = 0; i < self.handlesImageViewArray.count; ++i) {
         CGPoint center = [self.handlesImageViewArray[i] center];
@@ -165,14 +165,14 @@ const static double kRadiusOfHandlesImage = 13.0;
 #pragma mark - Private Method
 
 - (void)drawPieChart {
-    // Reset layer container.
+    // reset layer container
     if (self.layerContainer) {
         [self.layerContainer removeFromSuperlayer];
     }
     self.layerContainer = [CALayer layer];
     [self.layer addSublayer:self.layerContainer];
     
-    // Draw things into layer container.
+    // draw things into layer container
     [self drawColorfulPieLayer];
     if (!self.updateAnimated) {
         [self drawSeparateLineAndHandlesImage];
@@ -195,7 +195,7 @@ const static double kRadiusOfHandlesImage = 13.0;
         CAShapeLayer *pieLayer = [self drawPieShapeLayerWithBorderWidth:(self.outerRadius - self.innerRadius) borderColor:item.color startAngle:startAngle endAngle:item.angle];
         [self.layerContainer addSublayer:pieLayer];
         
-        // Animations
+        // animations
         if (self.updateAnimated) {
             CAShapeLayer *maskLayer = [self drawPieShapeLayerWithBorderWidth:(self.outerRadius - self.innerRadius) borderColor:[UIColor blackColor] startAngle:startAngle endAngle:item.angle];
             pieLayer.mask = maskLayer;
@@ -210,17 +210,17 @@ const static double kRadiusOfHandlesImage = 13.0;
     }
 }
 
-// Anti-clockwise
+// anti-clockwise
 - (CAShapeLayer *)drawPieShapeLayerWithBorderWidth:(double)borderWidth
                                        borderColor:(UIColor *)borderColor
                                         startAngle:(double)startAngle
                                           endAngle:(double)endAngle
 {
-    // Transform - Anti-clockwise.
+    // transform - anti-clockwise
     startAngle = UuusTwoPI - startAngle;
     endAngle   = UuusTwoPI - endAngle;
 
-    // Rotate 90 degrees - 12 o'clock.
+    // rotate 90 degrees - 12 o'clock
     startAngle = -M_PI_2 + startAngle;
     endAngle   = -M_PI_2 + endAngle;
 
@@ -241,7 +241,7 @@ const static double kRadiusOfHandlesImage = 13.0;
 }
 
 - (void)drawSeparateLineAndHandlesImage {
-    // Separate Lines
+    // separate Lines
     for (long i = 0; i < self.model.count; ++i) {
         UuusPieChartItem *item = self.model.itemsArray[i];
         double startAngle = 0.0;
@@ -253,7 +253,7 @@ const static double kRadiusOfHandlesImage = 13.0;
             }
             endAngle = item.angle;
         }
-        // Transform and rotate.
+        // transform and rotate
         startAngle = UuusTwoPI - M_PI_2 - startAngle;
         endAngle   = UuusTwoPI - M_PI_2 - endAngle;
 
@@ -280,7 +280,7 @@ const static double kRadiusOfHandlesImage = 13.0;
         [self.layerContainer addSublayer:separateLineLayer];
     }
     
-    // Handles Images
+    // handles images
     if (!self.handlesImageViewArray) {
         NSMutableArray *tempHandles = [NSMutableArray array];
         for (long i = 0; i < self.model.count - 1; ++i) {
@@ -297,7 +297,7 @@ const static double kRadiusOfHandlesImage = 13.0;
             [self bringSubviewToFront:obj];
         }
     }
-    // Update handles image's center.
+    // update handles image's center
     [self.handlesImageViewArray enumerateObjectsUsingBlock:^(UIImageView *obj, NSUInteger idx, BOOL *stop) {
         UuusPieChartItem *item = self.model.itemsArray[idx];
         double startAngle = 0.0;
@@ -306,7 +306,7 @@ const static double kRadiusOfHandlesImage = 13.0;
             UuusPieChartItem *preItem = self.model.itemsArray[idx - 1];
             startAngle = preItem.angle;
         }
-        // Transform and rotate.
+        // transform and rotate
         startAngle = UuusTwoPI - M_PI_2 - startAngle;
         endAngle   = UuusTwoPI - M_PI_2 - endAngle;
 
@@ -336,11 +336,11 @@ const static double kRadiusOfHandlesImage = 13.0;
     double angle = [self angleWithPoint:point];
     
 #warning bug here (fixed)
-    // Prevent from doing selections with touchesIndex every time.
+    // prevent from doing selections with touchesIndex every time
     if (self.touchesIndex == -1) {
-        // FirstObject
+        // first object
         long i = [[self.touchesIndexesArray firstObject] longValue];
-        // More than one touches index selected.
+        // more than one touches index selected
         if (self.touchesIndexesArray.count > 1) {
             CGPoint firstPoint = [self.handlesImageViewArray[i] center];
             double firstAngle = [self angleWithPoint:firstPoint];
@@ -353,22 +353,18 @@ const static double kRadiusOfHandlesImage = 13.0;
             // 判断是否是原点重叠（是则否认此前i的值）（第一个逆时针原点0度)||(第二个逆时针原点2Pi度）
             // 不想翻译 不想逼逼
             if (![self.model.itemsArray[i] angle] || [self.model.itemsArray[i] angle] == UuusTwoPI) {
-                // Separated by clockwise (if means anti-clockwise).
+                // separated by clockwise (if means anti-clockwise)
                 if (angle < M_PI) {
                     for (long j = 0; j < self.model.itemsArray.count; ++j) {
                         if ([self.model.itemsArray[j] proportion] > 0) {
-                            if (j > 0) {
-                                i = j - 1;
-                            }
+                            if (j > 0) i = j - 1;
                             break;
                         }
                     }
                 } else {
                     for (long j = self.model.itemsArray.count - 1; j > -1; --j) {
                         if ([self.model.itemsArray[j] proportion] > 0) {
-                            if (j < self.model.itemsArray.count - 1) {
-                                i = j;
-                            }
+                            if (j < self.model.itemsArray.count - 1) i = j;
                             break;
                         }
                     }
@@ -387,13 +383,11 @@ const static double kRadiusOfHandlesImage = 13.0;
     double radius = hypot(point.x - origin.x, point.y - origin.y);
 #warning bug here (fixed)
 #pragma mark bug asin(x) (-1 <= x <= 1) else return NAN
-    // Here: (0 <= x <= 1)
+    // here: (0 <= x <= 1)
     double radian = ((radius / 2.0) / self.ringsRadius) > 1.0 ?
     1.0 : ((radius / 2.0) / self.ringsRadius);
     angle = 2.0 * asin(radian);
-    if (point.x >= origin.x) {
-        angle = UuusTwoPI - angle;
-    }
+    if (point.x >= origin.x) angle = UuusTwoPI - angle;
     return angle;
 }
 

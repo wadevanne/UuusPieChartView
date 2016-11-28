@@ -13,16 +13,16 @@ typedef void(^UuusPieChartReturnUpdatedDataBlock)(UuusPieChartModel *model);
 
 @interface UuusPieChartView : UIView
 
-// Nil or zero means default value.
+// nil or zero means default value
 @property (nonatomic) double outerRadius;
 @property (nonatomic) double innerRadius;
 @property (nonatomic) double widthOfSeparateLine;
 
-// Nil means default value.
+// nil means default value
 @property (nonatomic, strong) UIImage *handlesImage;
 @property (nonatomic, strong) UIColor *colorOfSeparateLine;
 
-// Return updated datas.
+// return updated datas
 @property (nonatomic, strong) UuusPieChartReturnUpdatedDataBlock returnUpdatedDataBlock;
 
 - (instancetype)initWithFrame:(CGRect)frame
