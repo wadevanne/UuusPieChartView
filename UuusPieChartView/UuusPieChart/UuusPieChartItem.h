@@ -16,19 +16,19 @@ const static double UuusTwoPI = 2.0 * M_PI;
 
 // updated automatically
 @property (nonatomic) double value;
-@property (nonatomic) double proportion;
+@property (nonatomic) double ratio;
 
 // anti-clockwise 12 o'clock
 @property (nonatomic) double angle;
 
 // nil means random color
-@property (nonatomic, strong) UIColor *color;
+@property (nonatomic, copy) UIColor *color;
 
 // custom description
-@property (nonatomic, copy) NSString *textDescription;
+@property (nonatomic, copy) NSString *summary;
 
 + (instancetype)itemWithValue:(double)value
                         color:(UIColor *)color
-                  description:(NSString *)description;
+                      summary:(NSString *)summary;
 
 @end

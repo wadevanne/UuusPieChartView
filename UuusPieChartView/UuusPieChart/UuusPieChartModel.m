@@ -32,9 +32,7 @@
     return returnValue;
 }
 
-- (double)proportion {
-    return 1.0;
-}
+- (double)ratio { return 1.0; }
 
 - (NSUInteger)count {
     return self.itemsArray.count;
@@ -43,20 +41,21 @@
 - (void)setItemsArray:(NSArray<UuusPieChartItem *> *)itemsArray {
     _itemsArray = itemsArray;
     
-    double totalValue = self.value;
-    double preValue = 0.0;
-    double appendingValue = 0.0;
+    double previous = 0.0;
+    double interval = 0.0;
     
-    
-    // initialize item's proportion and angle
+    // initialize item's ratio and angle
     for (UuusPieChartItem *item in _itemsArray) {
-        preValue = appendingValue;
-        appendingValue += item.value;
+        previous = interval;
+        interval += item.value;
         
-        item.proportion = (appendingValue - preValue) / totalValue;
-        item.angle = appendingValue / totalValue * UuusTwoPI;
+        item.ratio = (interval - previous) / self.value;
+        item.angle = interval / self.value * UuusTwoPI;
         
-        [item addObserver:self forKeyPath:@"angle" options:NSKeyValueObservingOptionNew context:nil];
+        [item addObserver:self
+               forKeyPath:@"angle"
+                  options:NSKeyValueObservingOptionNew
+                  context:nil];
     }
 }
 
@@ -79,18 +78,18 @@
             if (angle > item.angle) item.angle = angle;
         }
         
-        double totalValue = self.value;
-        double preProportion = 0.0;
+        double preRatio = 0.0;
         double preValue = 0.0;
         
-        // update item's proportion and angle
+        // update item's ratio and angle
         for (UuusPieChartItem *item in self.itemsArray) {
-            double angleProportion = item.angle / UuusTwoPI;
+            double angleRatio = item.angle / UuusTwoPI;
             
-            item.proportion = angleProportion - preProportion;
-            preProportion = angleProportion;
-            item.value = angleProportion * totalValue - preValue;
-            preValue = angleProportion * totalValue;
+            item.ratio = angleRatio - preRatio;
+            item.value = angleRatio * self.value - preValue;
+            
+            preRatio = angleRatio;
+            preValue = angleRatio * self.value;
             
             NSLogU(@"item[%d].value = %f", [self.itemsArray indexOfObject:item], item.value);
         }

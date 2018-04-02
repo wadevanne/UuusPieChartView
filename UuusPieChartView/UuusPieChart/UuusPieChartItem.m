@@ -12,13 +12,13 @@
 
 + (instancetype)itemWithValue:(double)value
                         color:(UIColor *)color
-                  description:(NSString *)description
+                      summary:(NSString *)summary
 {
     UuusPieChartItem *item = [[UuusPieChartItem alloc] init];
     item.value = value;
     item.angle = M_PI;
     item.color = color;
-    item.textDescription = description;
+    item.summary = summary;
     return item;
 }
 

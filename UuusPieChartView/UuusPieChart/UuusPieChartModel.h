@@ -12,10 +12,10 @@
 @interface UuusPieChartModel : NSObject
 
 @property (nonatomic, readonly) double value;
-@property (nonatomic, readonly) double proportion;
+@property (nonatomic, readonly) double ratio;
 
 @property (nonatomic, readonly) NSUInteger count;
-@property (nonatomic, strong)   NSArray<UuusPieChartItem *> *itemsArray;
+@property (nonatomic, copy)     NSArray<UuusPieChartItem *> *itemsArray;
 
 @property (nonatomic, readonly, getter=isUpdated) BOOL updated;
 

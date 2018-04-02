@@ -335,7 +335,6 @@ const static double kRadiusOfHandlesImage = 13.0;
 - (void)confirmMovesHandlesTagWithPoint:(CGPoint)point {
     double angle = [self angleWithPoint:point];
     
-#warning bug here (fixed)
     // prevent from doing selections with touchesIndex every time
     if (self.touchesIndex == -1) {
         // first object
@@ -349,21 +348,19 @@ const static double kRadiusOfHandlesImage = 13.0;
             } else if (firstAngle < angle) {
                 i = [[self.touchesIndexesArray lastObject] intValue];
             }
-#warning bug here (fixed)
             // 判断是否是原点重叠（是则否认此前i的值）（第一个逆时针原点0度)||(第二个逆时针原点2Pi度）
-            // 不想翻译 不想逼逼
             if (![self.model.itemsArray[i] angle] || [self.model.itemsArray[i] angle] == UuusTwoPI) {
                 // separated by clockwise (if means anti-clockwise)
                 if (angle < M_PI) {
                     for (long j = 0; j < self.model.itemsArray.count; ++j) {
-                        if ([self.model.itemsArray[j] proportion] > 0) {
+                        if ([self.model.itemsArray[j] ratio] > 0) {
                             if (j > 0) i = j - 1;
                             break;
                         }
                     }
                 } else {
                     for (long j = self.model.itemsArray.count - 1; j > -1; --j) {
-                        if ([self.model.itemsArray[j] proportion] > 0) {
+                        if ([self.model.itemsArray[j] ratio] > 0) {
                             if (j < self.model.itemsArray.count - 1) i = j;
                             break;
                         }
@@ -381,7 +378,6 @@ const static double kRadiusOfHandlesImage = 13.0;
     double angle;
     CGPoint origin = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds) - self.ringsRadius);
     double radius = hypot(point.x - origin.x, point.y - origin.y);
-#warning bug here (fixed)
 #pragma mark bug asin(x) (-1 <= x <= 1) else return NAN
     // here: (0 <= x <= 1)
     double radian = ((radius / 2.0) / self.ringsRadius) > 1.0 ?
